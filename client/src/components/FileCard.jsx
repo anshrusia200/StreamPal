@@ -8,40 +8,105 @@ import {
   Icon,
   chakra,
   Tooltip,
+  Button,
+  Text,
+  HStack,
+  IconButton,
 } from "@chakra-ui/react";
 import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
 import { FiShoppingCart } from "react-icons/fi";
+import { BsFillPlayFill } from "react-icons/bs";
+import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { VideoPlayer } from "./VideoPlayer";
+export const FileCard = ({ name, posterUrl, fileId }) => {
+  const navigateTo = useNavigate();
+  const buttonRef = useRef(null);
+  const [visibility, setVisibility] = useState(false);
 
-export const FileCard = ({ name, posterUrl }) => {
+  const handleClick = () => {
+    navigateTo(`/file/${fileId}`);
+  };
+  const handleButtonClick = (e) => {
+    e.stopPropagation();
+
+    setVisibility(true);
+  };
   return (
-    <Tooltip label={name}>
-      <Flex px={0} w="full" alignItems="center" justifyContent="center">
+    <>
+      <VideoPlayer
+        visibility={visibility}
+        setVisibility={setVisibility}
+        videoId={fileId}
+      />
+      <Flex
+        dir="column"
+        justify={"space-between"}
+        align={"flex-end"}
+        bg={useColorModeValue("white", "gray.800")}
+        h={[250]}
+        borderWidth="1px"
+        rounded="lg"
+        shadow="lg"
+        position="relative"
+        overflow="hidden"
+        _before={{
+          content: '""',
+          position: "absolute",
+          inset: 0,
+          background: `url(${posterUrl})`,
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+          zIndex: 0,
+        }}
+        sx={{
+          ".movie-details": {
+            transition: "transform 150ms linear",
+            transform: "translateY(100%)",
+          },
+        }}
+        _hover={{
+          ".movie-details": {
+            transform: "translateY(0)",
+            transition: "transform 150ms linear",
+          },
+        }}
+        onClick={() => handleClick()}
+      >
         <Box
-          bg={useColorModeValue("white", "gray.800")}
-          w={"200px"}
-          borderWidth="1px"
-          rounded="lg"
-          shadow="lg"
-          position="relative"
-          p={2}
+          p={4}
+          color={"white"}
+          w={"full"}
+          bg={"gray.600"}
+          className="movie-details"
         >
-          <Image
-            src={posterUrl}
-            alt={`Picture of ${name}`}
-            rounded="lg"
-            w={"200px"}
-          />
-
-          <Box
-            fontSize="xl"
-            fontWeight="semibold"
-            lineHeight="tight"
-            isTruncated
-          >
-            {name}
-          </Box>
+          <HStack display="flex" justifyContent={"space-between"}>
+            <Tooltip label={name}>
+              <Text
+                isTruncated
+                textTransform={"capitalize"}
+                fontSize={"lg"}
+                fontWeight={"semibold"}
+              >
+                {truncate(name, 20)}
+              </Text>
+            </Tooltip>
+            <IconButton
+              colorScheme="blue"
+              size="md"
+              icon={<BsFillPlayFill />}
+              rounded={"full"}
+              ref={buttonRef}
+              onClick={(e) => handleButtonClick(e)}
+            />
+          </HStack>
         </Box>
       </Flex>
-    </Tooltip>
+    </>
   );
 };
+
+function truncate(text, num) {
+  return text.length > num ? text.slice(0, num - 1) + "..." : text;
+}

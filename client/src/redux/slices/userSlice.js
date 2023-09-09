@@ -6,6 +6,7 @@ import {
   logout,
   setPath,
   getMovies,
+  addMetadata,
 } from "../../api/user";
 import { toast } from "react-toastify";
 const userSlice = createSlice({
@@ -73,6 +74,7 @@ const userSlice = createSlice({
       state.email = "";
       state.folder = "";
       state.files = [];
+      state.metadataList = [];
       toast.success(`Logout Succesfull`);
     },
     [logout.rejected]: (state, action) => {
@@ -101,6 +103,16 @@ const userSlice = createSlice({
     [getMovies.rejected]: (state, action) => {
       state.isLoading = false;
       toast.error("Cannot fetch files");
+    },
+    [addMetadata.pending]: (state, action) => {
+      state.isLoading = true;
+    },
+    [addMetadata.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.metadataList = [...state.metadataList, action.payload];
+    },
+    [addMetadata.pending]: (state, action) => {
+      state.isLoading = true;
     },
   },
 });

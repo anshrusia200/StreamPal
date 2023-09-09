@@ -57,7 +57,12 @@ export const SignIn = () => {
   if (user.email) {
     return <Navigate to="/setFolder" replace={true} />;
   }
-
+  const handleKeyPress = (e) => {
+    console.log("Enter");
+    if (e.key === "Enter") {
+      signIn(e);
+    }
+  };
   return (
     // <div>
     //   <form action="">
@@ -92,6 +97,7 @@ export const SignIn = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, email: e.target.value })
                 }
+                onKeyDown={handleKeyPress}
               />
               {!isError ? (
                 <FormHelperText>

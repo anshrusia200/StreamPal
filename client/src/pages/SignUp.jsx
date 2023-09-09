@@ -41,7 +41,12 @@ export const SignUp = () => {
     }
     dispatch(register(email));
   };
-
+  const handleKeyPress = (e) => {
+    console.log("Enter");
+    if (e.key === "Enter") {
+      signUp();
+    }
+  };
   return (
     <Flex
       align={"center"}
@@ -68,6 +73,7 @@ export const SignUp = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, email: e.target.value })
                 }
+                onKeyDown={handleKeyPress}
               />
               {!isError ? (
                 <FormHelperText>

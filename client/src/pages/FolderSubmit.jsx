@@ -18,6 +18,7 @@ import {
   Spacer,
   List,
   HStack,
+  Tooltip,
 } from "@chakra-ui/react";
 import { ChevronRightIcon } from "@chakra-ui/icons";
 import {
@@ -117,11 +118,12 @@ export const FolderSubmit = () => {
     return <Navigate to="/" replace={true} />;
   }
   return (
-    <>
+    <Box width={"100%"}>
       <Flex
         align={"start"}
         justify={"center"}
         mx={0}
+        margin={"0 auto"}
         // maxH={"80vh"}
         flexDirection={"column"}
         // overflow={"auto"}
@@ -153,7 +155,8 @@ export const FolderSubmit = () => {
               borderBottom={"none"}
             >
               <Text fontSize={20} marginLeft={2}>
-                <b>Current Path</b> : {currentPath}
+                <b> Current Path - &nbsp; &nbsp; </b>{" "}
+                <span style={{ color: "#ECC94B" }}> {currentPath}</span>
               </Text>
             </Box>
             <Flex
@@ -180,7 +183,7 @@ export const FolderSubmit = () => {
                       justifyContent={"flex-start"}
                       fontSize={"20px"}
                       _hover={{
-                        bg: selectedDrive === drive ? "yellow.400" : "gray.200",
+                        bg: selectedDrive === drive ? "yellow.400" : "gray.600",
                       }}
                       bg={
                         selectedDrive === drive ? "yellow.400" : "transparent"
@@ -196,7 +199,7 @@ export const FolderSubmit = () => {
                       borderColor={"gray.300"}
                       borderStyle={"solid"}
                     >
-                      {drive}
+                      &nbsp;&nbsp;{drive}
                     </Box>
                   ))}
                 </Flex>
@@ -230,7 +233,7 @@ export const FolderSubmit = () => {
                             px={4}
                             py={2}
                             _hover={{
-                              bg: "gray.300",
+                              bg: "gray.600",
                             }}
                             role={"group"}
                             borderBottom={1}
@@ -270,29 +273,31 @@ export const FolderSubmit = () => {
                   <List p={0}>
                     {subFiles.length ? (
                       subFiles.map((file, index) => (
-                        <ListItem
-                          textAlign="start"
-                          w="full"
-                          px={4}
-                          py={2}
-                          bg={"gray.100"}
-                          color={"gray.400"}
-                          role={"group"}
-                          borderBottom={1}
-                          borderStyle="solid"
-                          borderColor="gray.200"
-                          key={index}
-                        >
-                          <HStack justify="space-between">
-                            <Text
-                              overflow="hidden"
-                              textOverflow="ellipsis"
-                              whiteSpace="nowrap"
-                            >
-                              {file}
-                            </Text>
-                          </HStack>
-                        </ListItem>
+                        <Tooltip label="">
+                          <ListItem
+                            textAlign="start"
+                            w="full"
+                            px={4}
+                            py={2}
+                            bg={"gray.500"}
+                            color={"gray.400"}
+                            role={"group"}
+                            borderBottom={1}
+                            borderStyle="solid"
+                            borderColor="gray.200"
+                            key={index}
+                          >
+                            <HStack justify="space-between">
+                              <Text
+                                overflow="hidden"
+                                textOverflow="ellipsis"
+                                whiteSpace="nowrap"
+                              >
+                                {file}
+                              </Text>
+                            </HStack>
+                          </ListItem>
+                        </Tooltip>
                       ))
                     ) : (
                       <></>
@@ -304,7 +309,7 @@ export const FolderSubmit = () => {
                   <Box
                     py={2}
                     zIndex={1}
-                    bg={"gray.200"}
+                    bg={"gray.800"}
                     position="sticky"
                     bottom="0"
                     right="0"
@@ -315,7 +320,7 @@ export const FolderSubmit = () => {
                     display={"flex"}
                     // justifyContent={"space-evenly"}
                   >
-                    <Box onClick={scrollToTop} w={"50%"}>
+                    <Box onClick={scrollToTop} w={"50%"} textAlign={"center"}>
                       Scroll to top
                     </Box>
                     <Box
@@ -324,6 +329,7 @@ export const FolderSubmit = () => {
                       borderStyle={"solid"}
                       borderColor={"gray.400"}
                       w={"50%"}
+                      textAlign={"center"}
                     >
                       Back
                     </Box>
@@ -341,6 +347,6 @@ export const FolderSubmit = () => {
           </Button>
         </Box>
       </Flex>
-    </>
+    </Box>
   );
 };

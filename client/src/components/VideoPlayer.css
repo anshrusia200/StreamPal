@@ -1,0 +1,17 @@
+.video-window {
+  width: 70%;
+  height: auto;
+  outline: none;
+}
+
+@media only screen and (max-width: 768px) {
+  .video-window {
+    width: 85%;
+  }
+}
+@media only screen and (max-width: 425px) {
+  .video-window {
+    width: 90%;
+    margin-top: 40%;
+  }
+}

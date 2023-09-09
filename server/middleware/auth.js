@@ -9,7 +9,7 @@ module.exports = async (req, res, next) => {
   try {
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findOne({ email: decodedToken.user.email });
-    console.log(user);
+    // console.log(user);
     req.user = user;
     next();
   } catch (error) {

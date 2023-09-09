@@ -13,6 +13,7 @@ import { auth } from "./api/user";
 import { FileView } from "./pages/FileView";
 import { Sidebar } from "./layouts/Sidebar";
 function App() {
+  localStorage.setItem("chakra-ui-color-mode", "dark");
   const dispatch = useDispatch();
 
   useEffect(() => {

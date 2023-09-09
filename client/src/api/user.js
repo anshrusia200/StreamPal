@@ -33,6 +33,7 @@ export const login = createAsyncThunk("login", async (email, thunkAPI) => {
       },
     };
     const response = await axios.post("/sign-in", body, config);
+    console.log("sign in response", response);
     return response.data;
   } catch (error) {
     const { msg } = error.response.data.errors[0];
@@ -67,6 +68,7 @@ export const loadDrives = async (req, res) => {
     console.log(response.data);
     return response.data;
   } catch (error) {
+    console.log(error);
     toast.error("Error fetching drives");
   }
 };
@@ -148,10 +150,20 @@ export const getMovies = createAsyncThunk(
 );
 
 export const addMetadata = createAsyncThunk(
-  "getMetadata",
-  async (filename, fileId, thunkAPI) => {
+  "addMetadata",
+  async (fileData, thunkAPI) => {
+    const { name, id } = fileData;
+    const body = {
+      name: name.split(".")[0],
+    };
     try {
-      const response = 3;
+      const response = await axios.post("getMetadata", body);
+      const metadataObj = {
+        _id: id,
+        metadata: response.data,
+      };
+      console.log(metadataObj);
+      return metadataObj;
     } catch (error) {
       const { msg } = error.response.data.errors[0];
       return thunkAPI.rejectWithValue(msg);
