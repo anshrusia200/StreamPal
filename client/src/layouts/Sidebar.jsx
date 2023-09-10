@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   IconButton,
   Avatar,
@@ -9,7 +10,7 @@ import {
   VStack,
   Icon,
   useColorModeValue,
-  Link,
+  // Link,
   Drawer,
   DrawerContent,
   Text,
@@ -19,6 +20,7 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
+  Image,
 } from "@chakra-ui/react";
 import {
   FiHome,
@@ -84,9 +86,16 @@ const SidebarContent = ({ onClose, ...rest }) => {
       {...rest}
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
+        <Link
+          to="/"
+          style={{
+            fontFamily: "monospace",
+            fontWeight: "bold",
+            fontSize: "1.5rem",
+          }}
+        >
           StreamPal
-        </Text>
+        </Link>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
@@ -136,7 +145,8 @@ const NavItem = ({ icon, children, ...rest }) => {
 
 const MobileNav = ({ onOpen, ...rest }) => {
   const dispatch = useDispatch();
-
+  const user = useSelector((state) => state.user);
+  // console.log(user);
   const { files, folder } = useSelector((state) => state.user);
 
   const handleSyncWithStorage = async () => {
@@ -172,16 +182,10 @@ const MobileNav = ({ onOpen, ...rest }) => {
         fontFamily="monospace"
         fontWeight="bold"
       >
-        Logo
+        StreamPal
       </Text>
 
       <HStack spacing={{ base: "0", md: "6" }}>
-        <IconButton
-          size="lg"
-          variant="ghost"
-          aria-label="open menu"
-          icon={<FiBell />}
-        />
         <Flex alignItems={"center"}>
           <Menu>
             <MenuButton
@@ -190,10 +194,12 @@ const MobileNav = ({ onOpen, ...rest }) => {
               _focus={{ boxShadow: "none" }}
             >
               <HStack>
-                <Avatar
-                  size={"sm"}
+                <Image
+                  objectFit={"cover"}
+                  width="20px"
+                  objectPosition={"-0.5px"}
                   src={
-                    "https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9"
+                    "https://res.cloudinary.com/appcloudansh/image/upload/v1681553204/name_cigjwx.png"
                   }
                 />
                 <VStack
@@ -202,8 +208,8 @@ const MobileNav = ({ onOpen, ...rest }) => {
                   spacing="1px"
                   ml="2"
                 >
-                  <Text fontSize="sm">Justina Clark</Text>
-                  <Text fontSize="xs" color="gray.600">
+                  <Text fontSize="sm">{user.email.split("@")[0]}</Text>
+                  <Text fontSize="sm" color="gray.500">
                     Admin
                   </Text>
                 </VStack>
@@ -213,14 +219,25 @@ const MobileNav = ({ onOpen, ...rest }) => {
               </HStack>
             </MenuButton>
             <MenuList
-              bg={useColorModeValue("white", "gray.900")}
+              bg={useColorModeValue("white", "gray.700")}
               borderColor={useColorModeValue("gray.200", "gray.700")}
+              padding={2}
             >
-              <MenuItem onClick={handleSyncWithStorage}>
+              <MenuItem
+                onClick={handleSyncWithStorage}
+                borderRadius={"3px"}
+                _hover={{ bg: "gray.600" }}
+              >
                 Sync with storage
               </MenuItem>
-              <MenuDivider />
-              <MenuItem onClick={handleLogout}>Sign out</MenuItem>
+
+              <MenuItem
+                onClick={handleLogout}
+                borderRadius={"3px"}
+                _hover={{ bg: "gray.600" }}
+              >
+                Sign out
+              </MenuItem>
             </MenuList>
           </Menu>
         </Flex>

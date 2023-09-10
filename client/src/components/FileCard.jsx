@@ -44,8 +44,9 @@ export const FileCard = ({ name, posterUrl, fileId }) => {
         justify={"space-between"}
         align={"flex-end"}
         bg={useColorModeValue("white", "gray.800")}
-        h={[250]}
+        h={[200]}
         borderWidth="1px"
+        cursor={"pointer"}
         rounded="lg"
         shadow="lg"
         position="relative"
@@ -66,20 +67,25 @@ export const FileCard = ({ name, posterUrl, fileId }) => {
             transform: "translateY(100%)",
           },
         }}
-        _hover={{
-          ".movie-details": {
-            transform: "translateY(0)",
-            transition: "transform 150ms linear",
+        _hover={[
+          {},
+          {
+            ".movie-details": {
+              transform: "translateY(0)",
+              transition: "transform 150ms linear",
+            },
           },
-        }}
+        ]}
         onClick={() => handleClick()}
       >
         <Box
-          p={4}
+          p={3}
           color={"white"}
           w={"full"}
           bg={"gray.600"}
           className="movie-details"
+          position={"absolute"}
+          bottom={["63px", "0"]}
         >
           <HStack display="flex" justifyContent={"space-between"}>
             <Tooltip label={name}>
@@ -89,7 +95,7 @@ export const FileCard = ({ name, posterUrl, fileId }) => {
                 fontSize={"lg"}
                 fontWeight={"semibold"}
               >
-                {truncate(name, 20)}
+                {truncate(name, 25)}
               </Text>
             </Tooltip>
             <IconButton

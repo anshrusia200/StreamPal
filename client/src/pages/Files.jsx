@@ -32,9 +32,16 @@ export const Files = () => {
   return (
     <Flex flexDirection={"column"}>
       {user.isLoading ? (
-        ""
+        <Flex
+          width="100%"
+          height={"70vh"}
+          justifyContent="center"
+          alignItems={"center"}
+        >
+          <Spinner size="xl" />{" "}
+        </Flex>
       ) : (
-        <SimpleGrid columns={[2, 2, 3, 3, 4]} gap={4}>
+        <SimpleGrid columns={[1, 2, 3, 3, 4]} gap={5}>
           {user && !user.isLoading && user.files ? (
             user.files.map((file) => {
               console.log(file._id);

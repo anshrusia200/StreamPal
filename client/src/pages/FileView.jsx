@@ -105,6 +105,7 @@ export const FileView = () => {
       setLocalMetadata(updatedMetadata);
     }
   }, [isLoading, fileId, metadataArray]);
+
   /****
    ****/
   return (
@@ -273,13 +274,17 @@ export const FileView = () => {
                   }
                 >
                   <Image
-                    src={`https://image.tmdb.org/t/p/original${person.profile_path}`}
+                    src={
+                      person.profile_path
+                        ? `https://image.tmdb.org/t/p/original${person.profile_path}`
+                        : "https://as2.ftcdn.net/v2/jpg/05/49/98/39/1000_F_549983970_bRCkYfk0P6PP5fKbMhZMIb07mCJ6esXL.jpg"
+                    }
                     alt={`Picture of ${person.character}`}
                     w={"140px"}
                     h={"140px"}
                     rounded="full"
                     objectFit={"cover"}
-                    objectPosition={"0 -20px"}
+                    objectPosition={person.profile_path ? "0 -20px" : ""}
                     m={"0 auto"}
                   />
                 </Tooltip>

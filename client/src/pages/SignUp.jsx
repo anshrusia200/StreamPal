@@ -56,7 +56,9 @@ export const SignUp = () => {
     >
       <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
         <Stack align={"center"}>
-          <Heading fontSize={"4xl"}>Create a New User</Heading>
+          <Heading fontSize={["3xl", "4xl", "4xl"]} textAlign="center">
+            Create a New User
+          </Heading>
         </Stack>
         <Box
           rounded={"lg"}
@@ -90,7 +92,13 @@ export const SignUp = () => {
                 align={"start"}
                 justify={"center"}
               >
-                <Link as={ReactRouterLink} color={"blue.400"} to="/signin">
+                <Link
+                  as={ReactRouterLink}
+                  color={"blue.400"}
+                  to="/signin"
+                  width={"100%"}
+                  textAlign={"center"}
+                >
                   Already a user ?
                 </Link>
               </Stack>
