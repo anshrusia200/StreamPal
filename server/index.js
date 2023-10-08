@@ -16,7 +16,8 @@ const connectDB = require("./config/db");
 const jwt = require("jsonwebtoken");
 const auth = require("./middleware/auth");
 const axios = require("axios");
-
+const { Readable } = require("stream");
+const { AbortController } = require("abort-controller");
 //for frontend
 
 connectDB();
@@ -122,14 +123,19 @@ app.post("/sign-in", async (req, res) => {
 
 app.post("/logout", auth, async (req, res) => {
   try {
-    // console.log("logout req");
-    res.cookie("token", null, {
-      expires: new Date(Date.now()),
-      httpOnly: true,
-      sameSite: "none",
-      secure: true,
-    });
-    return res.status(200).send("Logged out");
+    console.log("logout req");
+    // res.cookie("token", null, {
+    //   expires: new Date(Date.now()),
+    //   // httpOnly: true,
+    //   // sameSite: "none",
+    //   // secure: true,
+    // });
+    return res
+      .cookie("token", null, {
+        expires: new Date(Date.now()),
+      })
+      .status(200)
+      .send("Logged out");
   } catch (error) {
     return res.status(500).json({ errors: [{ msg: "Server Error" }] });
   }
@@ -418,6 +424,8 @@ app.post("/set-folder", (req, res) => {
   return res.json(directory);
 });
 
+const activeStreams = new Map();
+
 app.get("/video/:videoId", auth, function (req, res) {
   // Ensure there is a range given for the video
 
@@ -428,7 +436,11 @@ app.get("/video/:videoId", auth, function (req, res) {
   if (!range) {
     res.status(400).send("Requires Range header");
   }
-
+  if (activeStreams.has(videoId)) {
+    const controller = activeStreams.get(videoId);
+    controller.abort();
+    activeStreams.delete(videoId);
+  }
   //joining path of directory
   // const directoryPath = path.("/Users/anshr/Downloads");
   // console.log(directoryPath);
@@ -471,9 +483,31 @@ app.get("/video/:videoId", auth, function (req, res) {
 
   // create video read stream for this particular chunk
   const videoStream = fs.createReadStream(videoPath, { start, end });
+  const controller = new AbortController();
 
-  // Stream the video chunk to the client
-  videoStream.pipe(res);
+  // Store the controller for this stream
+  activeStreams.set(videoId, controller);
+  // Stream the video chunk to the client and handle abort
+  const readableStream = new Readable().wrap(videoStream);
+
+  readableStream.pipe(res);
+
+  // Handle client abort
+  req.on("aborted", () => {
+    // If the client aborts the request, abort the stream as well
+    controller.abort();
+    activeStreams.delete(videoId);
+  });
+
+  // Handle stream abort
+  controller.signal.addEventListener("abort", () => {
+    // Cleanup and remove the reference to this stream
+    videoStream.unpipe(res);
+    videoStream.destroy();
+    activeStreams.delete(videoId);
+  });
+  // // Stream the video chunk to the client
+  // videoStream.pipe(res);
 });
 
 app.listen(8000, function () {

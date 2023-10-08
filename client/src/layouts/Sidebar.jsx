@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 import { Link } from "react-router-dom";
 import {
   IconButton,
@@ -93,6 +94,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
             fontWeight: "bold",
             fontSize: "1.5rem",
           }}
+          onClick={onClose}
         >
           StreamPal
         </Link>
@@ -143,6 +145,16 @@ const NavItem = ({ icon, children, ...rest }) => {
   );
 };
 
+const StyledLink = styled(Link)`
+  display: none,
+  fontFamily: monospace,
+  fontWeight: bold,
+  fontSize: 1.5rem,
+  @media screen only and (max-width: 768px) {
+    display: flex
+  }
+`;
+
 const MobileNav = ({ onOpen, ...rest }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
@@ -176,14 +188,17 @@ const MobileNav = ({ onOpen, ...rest }) => {
         icon={<FiMenu />}
       />
 
-      <Text
-        display={{ base: "flex", md: "none" }}
-        fontSize="2xl"
-        fontFamily="monospace"
-        fontWeight="bold"
+      <StyledLink
+        to="/"
+        style={{
+          display: "none",
+          fontFamily: "monospace",
+          fontWeight: "bold",
+          fontSize: "1.5rem",
+        }}
       >
         StreamPal
-      </Text>
+      </StyledLink>
 
       <HStack spacing={{ base: "0", md: "6" }}>
         <Flex alignItems={"center"}>
